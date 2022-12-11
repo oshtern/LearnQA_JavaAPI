@@ -16,7 +16,7 @@ public class HelloWorldTest {
                 .get("https://playground.learnqa.ru/api/get_json_homework")
                 .jsonPath();
         response.prettyPrint();
-        String message = response.get("message");
+        String message = response.getString("messages[1]");
         if (message == null){
             System.out.println("The key 'message' is absent");
         } else {
