@@ -3,25 +3,28 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.http.Headers;
 
 public class HelloWorldTest {
 
     @Test
     public void testRestAssured() {
-        Map<String,String> params = new HashMap<>();
-        params.put("message", "And this is a second message");
-        JsonPath response = RestAssured
+//        Map<String, String> headers = new HashMap<>();
+//        headers.put("myHeader1", "myValue1");
+//        headers.put("myHeader2", "myValue2");
+
+        Response response = RestAssured
                 .given()
-                .queryParams(params)
-                .get("https://playground.learnqa.ru/api/get_json_homework")
-                .jsonPath();
+                .redirects()
+                .follow(false)
+                .when()
+                .get("https://playground.learnqa.ru/api/long_redirect")
+                .andReturn();
+
         response.prettyPrint();
-        String message = response.getString("messages[1]");
-        if (message == null){
-            System.out.println("The key 'message' is absent");
-        } else {
-            System.out.println(message);
-        }
+        String locationHeader = response.getHeader("Location");
+        System.out.println(locationHeader);
     }
 
 }
