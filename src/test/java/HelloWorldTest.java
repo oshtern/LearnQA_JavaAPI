@@ -21,10 +21,13 @@ public class HelloWorldTest {
 
         Response response1 = RestAssured
                 .given()
+                .redirects()
+                .follow(false)
                 .when()
                 .get(resource)
-                .then()
-                .extract().response();
+                .andReturn();
+        String locationHeader1 = response1.getHeader("Location");
+        System.out.println(locationHeader1);
 
         while (statusCode != 200) {
             Response response = RestAssured
@@ -45,6 +48,8 @@ public class HelloWorldTest {
             System.out.println(counter);
 
         }
+        System.out.println(statusCode);
+        System.out.println(counter);
         }
 }
 
