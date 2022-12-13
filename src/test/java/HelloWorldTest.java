@@ -17,8 +17,16 @@ public class HelloWorldTest {
         String resource = "https://playground.learnqa.ru/api/long_redirect";
         Response code = RestAssured.get(resource);
         int counter = 0;
+        int statusCode = code.getStatusCode();
 
-        for (int i = 0; i < 50; i++) {
+        Response response1 = RestAssured
+                .given()
+                .when()
+                .get(resource)
+                .then()
+                .extract().response();
+
+        while (statusCode != 200) {
             Response response = RestAssured
                     .given()
                     .redirects()
@@ -27,18 +35,16 @@ public class HelloWorldTest {
                     .get(resource)
                     .andReturn();
 
-            counter = counter + 1;
-//            response.prettyPrint();
+            counter += 1;
+            response.prettyPrint();
             String locationHeader = response.getHeader("Location");
             System.out.println(locationHeader);
             resource = locationHeader;
-            int statusCode = code.getStatusCode();
+
             System.out.println(statusCode);
             System.out.println(counter);
 
-        if (statusCode == 200) {
-            break;
         }
         }
-    }
 }
+
