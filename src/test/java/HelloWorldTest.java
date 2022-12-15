@@ -29,27 +29,28 @@ public class HelloWorldTest {
         String locationHeader1 = response1.getHeader("Location");
         System.out.println(locationHeader1);
 
-        while (statusCode != 200) {
+
+        do {
             Response response = RestAssured
                     .given()
                     .redirects()
-                    .follow(true)
+                    .follow(false)
                     .when()
-                    .get(resource)
-                    .andReturn();
+                    .get(resource);
+//                    .andReturn();
 
             counter += 1;
-            response.prettyPrint();
+            statusCode = response.getStatusCode();
+//            response.prettyPrint();
             String locationHeader = response.getHeader("Location");
             System.out.println(locationHeader);
-            resource = locationHeader;
-
             System.out.println(statusCode);
+            resource = locationHeader;
             System.out.println(counter);
+        }
+        while (statusCode != 200);
 
-        }
-        System.out.println(statusCode);
-        System.out.println(counter);
-        }
+    }
+
 }
 
