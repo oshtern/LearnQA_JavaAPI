@@ -24,7 +24,8 @@ public class ApiPasswordTest {
             var body = method.checkAuthCookie(cookie);
 
             if (body.contains("You are authorized")) {
-                System.out.println("Password is found" + password);
+                System.out.println("Password is found: " + password);
+                System.out.println(password);
                 break;
             }
         }
