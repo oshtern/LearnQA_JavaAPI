@@ -1,12 +1,16 @@
+package tests;
+
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lib.BaseTestcase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import io.restassured.http.Headers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import lib.Assertions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +18,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UserAuthTest {
+public class UserAuthTest extends BaseTestcase {
 
     String cookie;
     String header;
@@ -32,9 +36,9 @@ public class UserAuthTest {
                 .post("https://playground.learnqa.ru/api/user/login")
                 .andReturn();
 
-        this.cookie = responseGetAuth.getCookie("auth_sid");
-        this.header = responseGetAuth.getHeader("x-csrf-token");
-        this.userIdOnAuth = responseGetAuth.jsonPath().getInt("user_id");
+        this.cookie = this.getCookie(responseGetAuth, "auth_sid");
+        this.header = this.getHeader(responseGetAuth, "x-csrf-token");
+        this.userIdOnAuth = this.getIntFromJson(responseGetAuth, "user_id");
     }
 
 
@@ -42,16 +46,14 @@ public class UserAuthTest {
     public void testAuthUser() {
 
 
-        JsonPath responseCheckAuth = RestAssured
+        Response responseCheckAuth = RestAssured
                 .given()
                 .header("x-csrf-token", this.header)
                 .cookie("auth_sid", this.cookie)
                 .get("https://playground.learnqa.ru/api/user/auth")
-                .jsonPath();
+                .andReturn();
 
-        int userIdOnCheck = responseCheckAuth.getInt("user_id");
-        assertTrue(userIdOnCheck > 0, "Unexpected user id " + userIdOnCheck);
-        assertEquals(userIdOnAuth, userIdOnCheck, "user id from auth request is not equal to user id from check request");
+        Assertions.assertJsonByName(responseCheckAuth, "user_id", this.userIdOnAuth);
     }
 
     @ParameterizedTest
@@ -69,7 +71,7 @@ public class UserAuthTest {
             throw new IllegalArgumentException("Condition value is known: " + condition);
         }
 
-        JsonPath responseForCheck = spec.get().jsonPath();
-        assertEquals(0, responseForCheck.getInt("user_id"), "user id should be zero for unauth request");
+        Response responseForCheck = spec.get().andReturn();
+        Assertions.assertJsonByName(responseForCheck, "user_id", 0);
     }
 }
