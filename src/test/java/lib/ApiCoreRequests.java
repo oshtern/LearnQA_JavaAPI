@@ -2,9 +2,11 @@ package lib;
 
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
+import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -58,7 +60,7 @@ public class ApiCoreRequests {
 
     @Step("Make a POST-request with too short first name")
     public Response makePostRequestWithShortName(String url, Map<String, String> userData) {
-
+        String firstName = "l";
         userData.put("email", "vinkotov@example.com");
         userData.put("password", "123");
         userData.put("username", "learnqa");
@@ -123,6 +125,34 @@ public class ApiCoreRequests {
                 .filter(new AllureRestAssured())
                 .body(userData)
                 .get(url)
+                .andReturn();
+    }
+
+    @Step("Make a PUT-request by unauthorized user")
+    public Response makePutRequestByUnauthorizedUser(String url, Map<String, String> editData) {
+        String newName = "Changed Name";
+        editData.put("firstName", newName);
+
+        return given()
+                .filter(new AllureRestAssured())
+                .body(editData)
+                .put(url)
+                .andReturn();
+    }
+
+    @Step("Make a PUT-request by the same user to set invalid email=")
+    public Response makePutRequestToSetInvalidEmail(String url, Map<String, String> editData) {
+        String newEmail = "vinkotovexample.com";
+        editData.put("email", newEmail);
+        editData.put("cookie", "auth_sid");
+        editData.put("header", "x-csrf-token");
+
+
+
+        return given()
+                .filter(new AllureRestAssured())
+                .body(editData)
+                .put(url)
                 .andReturn();
     }
 }
