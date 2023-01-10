@@ -237,7 +237,7 @@ static Stream<Arguments> argsForUserCreation() {
         userData.put("lastName", lastName);
 
         Response responseCreateAuth = apiCoreRequests
-                .makePostRequestWithoutParameter("https://playground.learnqa.ru/api/user/", userData);
+                .makePostRequestWithoutOneParameter("https://playground.learnqa.ru/api/user/", userData);
 
         responseCreateAuth.prettyPrint();
 
