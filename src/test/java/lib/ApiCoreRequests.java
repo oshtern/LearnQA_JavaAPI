@@ -99,7 +99,7 @@ public class ApiCoreRequests extends BaseTestcase {
     }
 
     @Step("Make a POST-request without parameter")
-    public Response makePostRequestWithoutParameter(String url, Map<String, String> userData) {
+    public Response makePostRequestWithoutSingleParameter(String url, Map<String, String> userData) {
         String email = DataGenerator.getRandomEmail();
 
         return given()
