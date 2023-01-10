@@ -54,24 +54,13 @@ public class Ex13 {
         String device = response.get("device");
         System.out.println(device);
 
-        System.out.println(expectedValues[2]);
+        String expectedPlatform = expectedValues[1];
+        String expectedBrowser = expectedValues[2];
+        String expectedDevice = expectedValues[3];
 
-//        assertEquals(expectedValues, platform, "Unexpected platform. Actual is " + platform);
-
-//        String[] expectedPlatforms = {"Mobile", "Mobile", "Googlebot", "Web", "Mobile"};
-
-//        for (int i = 0; i < expectedPlatforms.length; i++) {
-//            assertTrue(expectedPlatforms[i] == platform, "Unexpected platform. Actual is: " + platform);
-//            System.out.println(expectedPlatforms[i]);
-//        }
-//
-//        String[] actualPlatforms = new String[] {};
-//        int i = 0;
-//        for (String expectedPlatform : expectedPlatforms) {
-//            assertEquals(expectedPlatforms[i], platform, "Unexpected platform. Actual is " + platform);
-//        }
-
-
+        assertEquals(expectedPlatform, platform, "Unexpected platform. Actual is " + platform);
+        assertEquals(expectedBrowser, browser, "Unexpected platform. Actual is " + browser);
+        assertEquals(expectedDevice, device, "Unexpected platform. Actual is " + device);
     }
 
 }

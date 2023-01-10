@@ -5,13 +5,15 @@ import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
+import lib.BaseTestcase;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
-public class ApiCoreRequests {
+public class ApiCoreRequests extends BaseTestcase {
     @Step("Make a GET-request with token and auth cookie")
     public Response makeGetRequest(String url, String token, String cookie) {
         return given()
@@ -96,14 +98,9 @@ public class ApiCoreRequests {
                 .andReturn();
     }
 
-    @Step("Make a POST-request without email")
-    public Response makePostRequestWithoutEmail(String url, Map<String, String> userData) {
-
-        userData.put("email", "vinkotov@example.com");
-        userData.put("password", "123");
-        userData.put("username", "learnqa");
-        userData.put("firstName", "l");
-        userData.put("lastName", "learnqa");
+    @Step("Make a POST-request without parameter")
+    public Response makePostRequestWithoutParameter(String url, Map<String, String> userData) {
+        String email = DataGenerator.getRandomEmail();
 
         return given()
                 .filter(new AllureRestAssured())
@@ -140,14 +137,16 @@ public class ApiCoreRequests {
                 .andReturn();
     }
 
-    @Step("Make a PUT-request by the same user to set invalid email=")
+    @BeforeEach
+    @Step("Make a PUT-request by the same user to set invalid email")
     public Response makePutRequestToSetInvalidEmail(String url, Map<String, String> editData) {
         String newEmail = "vinkotovexample.com";
         editData.put("email", newEmail);
         editData.put("cookie", "auth_sid");
         editData.put("header", "x-csrf-token");
 
-
+        String cookie;
+        String header;
 
         return given()
                 .filter(new AllureRestAssured())
