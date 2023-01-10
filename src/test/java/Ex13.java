@@ -62,5 +62,4 @@ public class Ex13 {
         assertEquals(expectedBrowser, browser, "Unexpected platform. Actual is " + browser);
         assertEquals(expectedDevice, device, "Unexpected platform. Actual is " + device);
     }
-
 }
