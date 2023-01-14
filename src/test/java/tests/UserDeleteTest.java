@@ -1,5 +1,6 @@
 package tests;
 
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -16,7 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UserDeleteTest {
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
+    @Feature("User deletion")
     @Test
+    @Severity(SeverityLevel.CRITICAL)
     public void deleteUserWithId2() {
 
         //Login with user with id=2
@@ -50,6 +53,8 @@ public class UserDeleteTest {
         assertTrue(responseDelete.statusCode() == 400, "Please, do not delete test users with ID 1, 2, 3, 4 or 5.");
     }
 
+    @Severity(SeverityLevel.TRIVIAL)
+    @Feature("User deletion")
     @Test
     public void deleteUserThemself() {
         //Generate user
@@ -103,6 +108,9 @@ public class UserDeleteTest {
 
     }
 
+    @Severity(SeverityLevel.BLOCKER)
+    @Epic("Criteria of possibility to delete other user")
+    @Feature("User deletion")
     @Test
     public void deleteUserByOtherUser() {
         //Generate user #1
